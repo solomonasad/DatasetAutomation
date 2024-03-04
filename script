@@ -1,0 +1,30 @@
+import pyrealsense2 as rs
+import matplotlib.pyplot as plt
+import numpy as np
+import cv2
+import time
+
+pipe = rs.pipeline()
+profile = pipe.start()
+
+try:
+  num_images = 5
+  delay_seconds = 10
+  
+  for i in range(1, num_images + 1):
+    time.sleep(delay_seconds) 
+
+    frames = pipe.wait_for_frames()
+    color_frame = frames.get_color_frame()
+    color_image = np.asanyarray(color_frame.get_data())
+
+    plt.imshow(color_image)
+    plt.show()
+
+    filename = f"/home/franka_micro_pc_3/image_{i}.png"
+
+
+    cv2.imwrite(filename, color_image)
+      
+finally:
+    pipe.stop()
